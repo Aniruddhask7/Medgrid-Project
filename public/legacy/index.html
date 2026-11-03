@@ -1,0 +1,3264 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description"
+    content="MedGrid — find doctors, book appointments and manage your health records in one place.">
+  <title>Healthcare, simplified · MedGrid</title>
+  <style>
+    :root {
+      --primary: #1464d2;
+      --primary-dark: #0e4da8;
+      --secondary: #13a67a;
+      --accent: #e9f3ff;
+      --bg: #f6f9fc;
+      --surface: #fff;
+      --text: #172033;
+      --muted: #667085;
+      --border: #dfe6ef;
+      --danger: #d92d20;
+      --warning: #b54708;
+      --success: #087443;
+      --shadow: 0 12px 35px rgba(16, 36, 64, .08);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 180ms ease;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f1722;
+      --surface: #17212e;
+      --text: #02434a;
+      --muted: #aab7c7;
+      --border: #2b3a4c;
+      --accent: #17365f;
+      --shadow: 0 12px 35px rgba(0, 0, 0, .22);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      margin: 0;
+
+      /* background-color: #547764; */
+
+      color: var(--text);
+      font: 15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer
+    }
+
+    img {
+      max-width: 100%;
+      display: block
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0
+    }
+
+    .container {
+      width: max(1180px, calc(100% - 32px));
+      margin: auto
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 10px;
+      background: #fff;
+      padding: 10px
+    }
+
+    .skip-link:focus {
+      left: 10px;
+      z-index: 9999
+    }
+
+    
+
+    .topbar {
+      background: #0f4da8;
+      color: #fff;
+      font-size: 13px
+    }
+
+    .topbar .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0
+    }
+
+    .navbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50
+    }
+
+    .nav-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 24px
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--primary)
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      margin-left: auto
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-weight: 600
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary)
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px
+    }
+
+    .mobile-menu {
+      display: none
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 11px;
+      padding: 11px 17px;
+      font-weight: 700;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px
+    }
+
+    .btn:hover {
+      transform: translateY(-1px)
+    }
+
+    .btn:focus-visible,
+    .icon-btn:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(20, 100, 210, .25);
+      outline-offset: 2px
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark)
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: #fff
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text)
+    }
+
+    .btn-outline:hover {
+      background-color: #11dab8;
+    }
+
+    .btn-soft {
+      background: var(--accent);
+      color: var(--primary)
+    }
+
+    .btn-danger {
+      background: #fee4e2;
+      color: var(--danger)
+    }
+
+    .icon-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center
+    }
+
+    .hero {
+      padding: 78px 0 55px;
+      background: radial-gradient(circle at 85% 15%, #dff3ef, transparent 30%), linear-gradient(180deg, var(--surface), var(--bg))
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 60px;
+      align-items: center
+    }
+
+    .eyebrow {
+      color: rgb(18, 215, 84);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 15px
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 1.05;
+      margin: 13px 0 18px;
+      letter-spacing: -.04em
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 640px
+    }
+
+    .search-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 15px;
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      margin-top: 100px
+    }
+
+    .search-box input {
+      border: 0;
+      outline: 0;
+      background: transparent;
+      flex: 1;
+      min-width: 0;
+      padding: 11px
+    }
+
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: var(--shadow)
+    }
+
+    .hero-card .pulse {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px
+    }
+
+    .pulse-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--secondary);
+      box-shadow: 0 0 0 7px rgba(19, 166, 122, .12)
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      padding: 25px 0
+    }
+
+
+    .stat-card {
+      background-color: #4cd0df;
+      /* background: var(--surface); */
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow)
+    }
+
+    .stat-card {
+      padding: 20px
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 27px
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    .section {
+      padding: 64px 0
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 25px
+    }
+
+    .section-head h2 {
+      font-size: 30px;
+      margin-bottom: 5px
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+
+    }
+
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+
+    .grid-4 {
+
+      grid-template-columns: repeat(4, 1fr)
+    }
+
+
+    .specialty {
+      padding: 22px;
+      text-align: center
+    }
+
+    .specialty .specialty-icon {
+      font-size: 32px;
+      margin-bottom: 10px
+    }
+
+    .specialty:hover {
+      border-color: #9ec4f4;
+      transform: translateY(-2px)
+    }
+
+    .testimonial {
+      padding: 25px;
+      background: linear-gradient(135deg, #DCEEFF, #D5F5F0);
+    }
+
+    .stars {
+      color: #f59e0b;
+      letter-spacing: 2px
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--accent)
+    }
+
+    .avatar-lg {
+      width: 86px;
+      height: 86px
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--accent);
+      color: var(--primary)
+    }
+
+    .badge.success {
+      background: #dcfae8;
+      color: var(--success)
+    }
+
+    .badge.warning {
+      background: #fef0c7;
+      color: var(--warning)
+    }
+
+    .badge.danger {
+      background: #fee4e2;
+      color: var(--danger)
+    }
+
+    .form-group {
+      margin-bottom: 17px
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 7px
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 11px;
+      padding: 12px 13px
+    }
+
+    .textarea {
+      min-height: 110px;
+      resize: vertical
+    }
+
+    .input.error,
+    .select.error {
+      border-color: var(--danger)
+    }
+
+    .field-error {
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 5px;
+      min-height: 17px
+    }
+
+    .auth-shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 30px
+    }
+
+    .auth-card {
+      width: min(470px, 100%);
+      padding: 32px
+    }
+
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 22px
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start
+    }
+
+    .checkbox input {
+      margin-top: 4px
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      margin: 20px 0
+    }
+
+    .divider:before,
+    .divider:after {
+      content: "";
+      height: 1px;
+      background: var(--border);
+      flex: 1
+    }
+
+    .app-shell {
+      min-height: 100vh
+    }
+
+    .app-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      z-index: 70;
+      transition: transform var(--transition)
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 6px;
+      margin-top: 30px
+    }
+
+    .sidebar-nav a {
+      padding: 11px 13px;
+      border-radius: 10px;
+      color: var(--muted);
+      font-weight: 650
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background: var(--accent);
+      color: var(--primary)
+    }
+
+    .sidebar-bottom {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px
+    }
+
+    .app-main {
+      margin-left: 250px;
+      min-height: 100vh
+    }
+
+    .app-header {
+      height: 72px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 40
+    }
+
+    .main-content {
+      padding: 28px
+    }
+
+    .page-title {
+      margin-bottom: 22px
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px
+    }
+
+    .span-4 {
+      grid-column: span 4
+    }
+
+    .span-6 {
+      grid-column: span 6
+    }
+
+    .span-8 {
+      grid-column: span 8
+    }
+
+    .span-12 {
+      grid-column: span 12
+    }
+
+    .widget {
+      padding: 22px;
+      background: linear-gradient(135deg, #DCEEFF, #D5F5F0);
+    }
+
+    .widget:hover {
+      background: linear-gradient(135deg, #E7F4FF, #D4F7EF);
+    }
+
+    .metric {
+      font-size: 30px;
+      font-weight: 850
+    }
+
+    .progress {
+      height: 8px;
+      background: var(--accent);
+      border-radius: 999px;
+      overflow: hidden
+    }
+
+    .progress>span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: inherit
+    }
+
+    .table-wrap {
+      overflow: auto
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      white-space: nowrap
+    }
+
+    .data-table th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    .nav-dropdown-panel {
+    position: absolute;
+    top: 100%; /* Changed from calc(100% + 14px) */
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    min-width: 220px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .16s ease, transform .16s ease;
+    z-index: 60;
+}
+
+    .doctor-card {
+      padding: 20px
+    }
+
+    .doctor-card .doctor-top {
+      display: flex;
+      gap: 14px
+    }
+
+    .doctor-card .doctor-info {
+      flex: 1
+    }
+
+    .doctor-card h3 {
+      margin: 0 0 3px
+    }
+
+    .doctor-card .meta {
+      font-size: 13px;
+      color: var(--muted)
+    }
+
+    .doctor-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 17px
+    }
+
+    .doctor-actions .btn {
+      flex: 1
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 19, 32, .55);
+      display: none;
+      place-items: center;
+      padding: 20px;
+      z-index: 100
+    }
+
+    .modal-backdrop.open {
+      display: grid
+    }
+
+    .modal {
+      width: min(600px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, .25);
+      animation: modalIn .18s ease
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: start
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px
+    }
+
+    .toast-region {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 200;
+      display: grid;
+      gap: 10px
+    }
+
+    .toast {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      padding: 13px 16px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      min-width: 260px;
+      animation: toastIn .2s ease
+    }
+
+    .toast.success {
+      border-left-color: var(--secondary)
+    }
+
+    .toast.error {
+      border-left-color: var(--danger)
+    }
+
+    .tabs {
+      display: flex;
+      gap: 7px;
+      border-bottom: 1px solid var(--border);
+      overflow: auto
+    }
+
+    .tab {
+      border: 0;
+      background: transparent;
+      padding: 11px 14px;
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary)
+    }
+
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      height: calc(100vh - 128px);
+      min-height: 560px
+    }
+
+    .chat-list {
+      border-right: 1px solid var(--border);
+      overflow: auto
+    }
+
+    .chat-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer
+    }
+
+    .chat-item.active,
+    .chat-item:hover {
+      background: var(--accent)
+    }
+
+    .chat-window {
+      display: flex;
+      flex-direction: column;
+      min-width: 0
+    }
+
+    .chat-head {
+      padding: 15px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .messages {
+      flex: 1;
+      overflow: auto;
+      padding: 20px;
+      display: grid;
+      align-content: start;
+      gap: 10px
+    }
+
+    .bubble {
+      max-width: 72%;
+      padding: 11px 14px;
+      border-radius: 15px;
+      background: var(--accent)
+    }
+
+    .bubble.mine {
+      justify-self: end;
+      background: var(--primary);
+      color: #fff;
+      border-bottom-right-radius: 4px
+    }
+
+    .bubble.theirs {
+      border-bottom-left-radius: 4px
+    }
+
+    .chat-compose {
+      display: flex;
+      gap: 8px;
+      padding: 15px;
+      border-top: 1px solid var(--border)
+    }
+
+    .timeline {
+      display: grid;
+      gap: 15px
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 16px
+    }
+
+    .timeline-item time {
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .empty {
+      text-align: center;
+      padding: 45px;
+      color: var(--muted)
+    }
+
+    .footer {
+      padding: 35px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted)
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(.98)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(15px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      *,
+      *:before,
+      *:after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important
+      }
+    }
+
+    .notification-panel {
+      position: fixed;
+      right: 20px;
+      top: 78px;
+      width: min(360px, calc(100% - 40px));
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      z-index: 90;
+      padding: 6px
+    }
+
+    .notification-row {
+      padding: 13px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .notification-row:last-child {
+      border-bottom: 0
+    }
+
+    .notification-row p {
+      font-size: 13px;
+      margin: 4px 0
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr)
+    }
+
+    @media(max-width:575px) {
+      .grid-2 {
+        grid-template-columns: 1fr
+      }
+
+      .nav-links.mobile-open {
+        display: grid;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow)
+      }
+    }
+    
+
+    /* MedGrid visual refresh — keeps all original content, adds colour and interaction */
+    :root {
+      --purple: #7c3aed;
+      --pink: #ec4899;
+      --cyan: #06b6d4
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #5b8def);
+      box-shadow: 0 8px 18px rgba(20, 100, 210, .20)
+
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--secondary), #22c58b)
+    }
+
+    .card,
+    .stat-card,
+    .hero-card {
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease
+    }
+
+    .card:hover,
+    .stat-card:hover,
+    .hero-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(16, 36, 64, .12)
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 10% 15%, rgba(124, 58, 237, .10), transparent 28%), radial-gradient(circle at 88% 20%, rgba(19, 166, 122, .16), transparent 30%), linear-gradient(180deg, var(--surface), var(--bg))
+    }
+
+    .hero:before,
+    .hero:after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(1px);
+      pointer-events: none
+    }
+
+    .hero:before {
+      width: 180px;
+      height: 180px;
+      background: rgba(236, 72, 153, .08);
+      right: -60px;
+      bottom: -40px
+    }
+
+    .hero:after {
+      width: 120px;
+      height: 120px;
+      background: rgba(6, 182, 212, .08);
+      left: 35%;
+      top: 15px
+    }
+
+    .auth-shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 8% 15%, rgba(20, 100, 210, .18), transparent 28%), radial-gradient(circle at 92% 85%, rgba(19, 166, 122, .18), transparent 28%), linear-gradient(135deg, #f7fbff, #eef8f6)
+    }
+
+    .auth-shell:before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(124, 58, 237, .12), rgba(236, 72, 153, .08));
+      top: -180px;
+      right: -120px
+    }
+
+    .auth-shell:after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(6, 182, 212, .08);
+      bottom: -150px;
+      left: -90px
+    }
+
+    .auth-card {
+      width: min(980px, 100%);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      border: 1px solid rgba(255, 255, 255, .7);
+      box-shadow: 0 28px 80px rgba(16, 36, 64, .15)
+    }
+
+    .auth-card .auth-brand {
+      padding: 38px 38px 0
+    }
+
+    .auth-visual {
+      min-height: 620px;
+      padding: 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(145deg, #0e5bc4, #13a67a);
+      color: #fff;
+      position: relative;
+      overflow: hidden
+    }
+
+    .auth-visual:before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border: 55px solid rgba(255, 255, 255, .10);
+      border-radius: 50%;
+      right: -110px;
+      top: -70px
+    }
+
+    .auth-visual:after {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border: 35px solid rgba(255, 255, 255, .08);
+      border-radius: 50%;
+      left: -90px;
+      bottom: -50px
+    }
+
+    .auth-visual h2 {
+      font-size: 34px;
+      line-height: 1.1;
+      max-width: 360px;
+      margin: 12px 0
+    }
+
+    .auth-visual p {
+      color: rgba(255, 255, 255, .84);
+      max-width: 390px
+    }
+
+    .auth-visual img {
+      width: 100%;
+      max-height: 310px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 25px rgba(0, 0, 0, .15));
+      animation: floatCare 4s ease-in-out infinite
+    }
+
+    .auth-feature-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      position: relative;
+      z-index: 1
+    }
+
+    .auth-feature {
+      padding: 13px;
+      border: 1px solid rgba(255, 255, 255, .22);
+      background: rgba(255, 255, 255, .10);
+      backdrop-filter: blur(8px);
+      border-radius: 14px
+    }
+
+    .auth-feature strong {
+      display: block;
+      font-size: 18px
+    }
+
+    .auth-feature span {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .75)
+    }
+
+    .auth-form-side {
+      padding: 38px
+    }
+
+    .auth-form-side .auth-brand {
+      padding: 0
+    }
+
+    .auth-form-side form {
+      margin-top: 25px
+    }
+
+    .auth-form-side .btn-primary {
+      min-height: 48px
+    }
+
+    .input:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 4px rgba(20, 100, 210, .10)
+    }
+
+    .password-meter {
+      height: 6px;
+      border-radius: 99px;
+      background: var(--border);
+      overflow: hidden;
+      margin-top: 8px
+    }
+
+    .password-meter span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #ef4444, #f59e0b, #13a67a);
+      transition: width .25s ease
+    }
+
+    .login-tip {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #eef5ff, #effcf8);
+      border: 1px solid #dcebf5;
+      margin-top: 18px;
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .feature-image {
+      width: 100%;
+      border-radius: 20px;
+      margin: 0 0 20px;
+      box-shadow: 0 15px 35px rgba(20, 100, 210, .12)
+    }
+
+    @keyframes floatCare {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-8px)
+      }
+    }
+
+    @media(max-width:800px) {
+      .auth-card {
+        grid-template-columns: 1fr
+      }
+
+      .auth-visual {
+        min-height: 360px;
+        padding: 28px
+      }
+
+      .auth-visual img {
+        max-height: 190px
+      }
+
+      .auth-form-side {
+        padding: 28px
+      }
+
+      .auth-card .auth-brand {
+        padding: 0
+      }
+
+      .auth-feature-row {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    @media(max-width:575px) {
+      .auth-shell {
+        padding: 12px
+      }
+
+      .auth-visual {
+        display: none
+      }
+
+      .auth-form-side {
+        padding: 24px
+      }
+
+      .auth-card .auth-brand {
+        padding: 0
+      }
+
+      .auth-form-side form {
+        margin-top: 18px
+      }
+
+      .btn-outline {
+        padding: 10px;
+      }
+    }
+  </style>
+  <style>
+    @media (max-width:1199px) {
+      .hero-grid {
+        gap: 35px
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media (max-width:991px) {
+      .nav-links {
+        display: none
+      }
+
+      .mobile-menu {
+        display: grid;
+        margin-left: auto
+      }
+
+      .nav-actions .desktop-only {
+        display: none
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr
+      }
+
+      .hero {
+        padding-top: 55px
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .app-sidebar {
+        transform: translateX(-100%)
+      }
+
+      .app-sidebar.open {
+        transform: translateX(0)
+      }
+
+      .app-main {
+        margin-left: 0
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .45);
+        z-index: 60
+      }
+
+      .sidebar-overlay.open {
+        display: block
+      }
+
+      .dashboard-grid .span-4,
+      .dashboard-grid .span-6,
+      .dashboard-grid .span-8 {
+        grid-column: span 6
+      }
+
+      .filters {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .chat-layout {
+        height: calc(100vh - 100px)
+      }
+    }
+
+    @media (max-width:767px) {
+      .topbar {
+        display: none
+      }
+
+      .container {
+        width: min(100% - 24px, 1180px)
+      }
+
+      .nav-inner {
+        min-height: 64px
+      }
+
+      .section {
+        padding: 45px 0
+      }
+
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr
+      }
+
+      .stat-grid {
+        gap: 10px
+      }
+
+      .stat-card {
+        padding: 15px
+      }
+
+      .stat-card strong {
+        font-size: 22px
+      }
+
+      .main-content {
+        padding: 18px
+      }
+
+      .app-header {
+        padding: 0 18px
+      }
+
+      .dashboard-grid {
+        display: grid
+      }
+
+      .dashboard-grid .span-4,
+      .dashboard-grid .span-6,
+      .dashboard-grid .span-8,
+      .dashboard-grid .span-12 {
+        grid-column: span 12
+      }
+
+      .filters {
+        grid-template-columns: 1fr
+      }
+
+      .table-wrap {
+        margin-inline: -5px
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 11px 9px
+      }
+
+      .chat-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 0
+      }
+
+      .chat-list {
+        height: 260px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border)
+      }
+
+      .chat-window {
+        height: calc(100vh - 420px);
+        min-height: 420px
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 3px
+      }
+
+      .search-box {
+        flex-wrap: wrap
+      }
+
+      .search-box input {
+        flex-basis: 100%
+      }
+    }
+
+    @media (max-width:575px) {
+      .hero h1 {
+        font-size: 38px
+      }
+
+      .hero p {
+        font-size: 16px
+      }
+
+      .hero-card {
+        padding: 20px
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .between {
+        align-items: flex-start;
+        flex-direction: column
+      }
+
+      .doctor-actions {
+        flex-direction: column
+      }
+
+      .auth-card {
+        padding: 22px
+      }
+    }
+
+    @media (max-width:399px) {
+      .stat-grid {
+        grid-template-columns: 1fr
+      }
+
+      .btn {
+        width: 100%
+      }
+
+      .nav-actions .btn {
+        width: auto
+      }
+
+      .modal {
+        padding: 19px
+      }
+    }
+  </style>
+
+  <style>
+    .nav-item {
+      position: relative
+    }
+
+    .nav-dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 0;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0
+    }
+
+    .nav-dropdown-toggle:hover,
+    .nav-item.open .nav-dropdown-toggle {
+      color: var(--primary)
+    }
+
+    .nav-dropdown-toggle .chev {
+      width: 10px;
+      height: 10px;
+      transition: transform .18s ease
+    }
+
+    .nav-item.open .nav-dropdown-toggle .chev {
+      transform: rotate(180deg)
+    }
+
+    .nav-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      min-width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 60
+    }
+
+    .nav-item.open .nav-dropdown-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0)
+    }
+
+    .nav-dropdown-panel a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px
+    }
+
+    .nav-dropdown-panel a:hover {
+      background: var(--accent);
+      color: var(--primary)
+    }
+
+    .nav-dropdown-panel a svg {
+      flex: none;
+      color: var(--primary)
+    }
+
+    /* ---------- Hamburger button ---------- */
+    .hamburger {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer
+    }
+
+    .hamburger span {
+      display: block;
+      width: 19px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--text);
+      transition: transform .22s ease, opacity .22s ease
+    }
+
+    .hamburger[aria-expanded="true"] span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg)
+    }
+
+    .hamburger[aria-expanded="true"] span:nth-child(2) {
+      opacity: 0
+    }
+
+    .hamburger[aria-expanded="true"] span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg)
+    }
+
+    /* ---------- Mobile drawer ---------- */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 35, .5);
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(340px, 86vw);
+      background: var(--surface);
+      z-index: 130;
+      transform: translateX(100%);
+      transition: transform .26s ease;
+      box-shadow: -18px 0 45px rgba(16, 36, 64, .18);
+      display: flex;
+      flex-direction: column
+    }
+
+    .mobile-drawer.open {
+      transform: translateX(0)
+    }
+
+    .mobile-drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .mobile-drawer-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto
+    }
+
+    .mobile-nav {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 10px 0
+    }
+
+    .mobile-nav a,
+    .mobile-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 10px;
+      border-radius: 12px;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 15px;
+      background: none;
+      border: 0;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer
+    }
+
+    .mobile-nav a:hover,
+    .mobile-dropdown-toggle:hover {
+      background: var(--accent);
+      color: var(--primary)
+    }
+
+    .mobile-dropdown-toggle .chev {
+      width: 11px;
+      height: 11px;
+      transition: transform .2s ease;
+      flex: none
+    }
+
+    .mobile-dropdown-toggle[aria-expanded="true"] .chev {
+      transform: rotate(180deg)
+    }
+
+    .mobile-dropdown {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .24s ease;
+      padding-left: 14px;
+      display: flex;
+      flex-direction: column
+    }
+
+    .mobile-dropdown.open {
+      max-height: 220px
+    }
+
+    .mobile-dropdown a {
+      padding: 11px 10px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--muted)
+    }
+
+    .mobile-dropdown a:hover {
+      color: var(--primary)
+    }
+
+    .mobile-drawer-actions {
+      margin-top: auto;
+      padding: 18px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      gap: 10px
+    }
+
+    .mobile-drawer-actions .btn {
+      width: 100%
+    }
+
+    body.drawer-open {
+      overflow: hidden
+    }
+
+    /* ---------- Hero carousel ---------- */
+    .hero-carousel {
+      position: relative;
+      padding: 26px 0 78px
+    }
+
+    .carousel-viewport {
+      position: relative;
+      overflow: hidden;
+      border-radius: 26px;
+      box-shadow: 0 25px 60px rgba(16, 36, 64, .16)
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform .55s cubic-bezier(.65, 0, .35, 1)
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      align-items: center;
+      gap: 30px;
+      padding: 52px 56px;
+      min-height: 360px;
+      color: #fff
+    }
+
+    .carousel-slide .eyebrow {
+      color: rgba(255, 255, 255, .85)
+    }
+
+    .carousel-slide h2 {
+      font-size: clamp(28px, 3.6vw, 42px);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      margin: 12px 0 14px;
+      color: #fff
+    }
+
+    .carousel-slide p {
+      font-size: 16px;
+      color: rgba(255, 255, 255, .88);
+      max-width: 460px;
+      margin-bottom: 24px
+    }
+
+    .carousel-slide .btn-primary {
+      background: #fff;
+      color: var(--primary)
+    }
+
+    .carousel-slide .btn-primary:hover {
+      background: #eef4ff
+    }
+
+    .carousel-art {
+      display: grid;
+      place-items: center
+    }
+
+    .carousel-art svg {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .18))
+    }
+
+    .slide-1 {
+      background: linear-gradient(120deg, #0e4da8, #1464d2 45%, #3fa9dd)
+    }
+
+    .slide-2 {
+      background: linear-gradient(120deg, #5b21b6, #7c3aed 45%, #c084fc)
+    }
+
+    .slide-3 {
+      background: linear-gradient(120deg, #0b6e52, #13a67a 45%, #34d399)
+    }
+
+    .slide-4 {
+      background: linear-gradient(120deg, #9d174d, #ec4899 45%, #f9a8d4)
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      z-index: 10;
+      transition: transform .18s ease, background .18s ease
+    }
+
+    .carousel-arrow:hover {
+      transform: translateY(-50%) scale(1.08);
+      background: var(--accent)
+    }
+
+    .carousel-arrow.prev {
+      left: 14px
+    }
+
+    .carousel-arrow.next {
+      right: 14px
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 20px
+    }
+
+    .carousel-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 0;
+      background: var(--border);
+      cursor: pointer;
+      padding: 0;
+      transition: width .22s ease, background .22s ease
+    }
+
+    .carousel-dot.active {
+      width: 26px;
+      border-radius: 6px;
+      background: var(--primary)
+    }
+
+    /* Floating search card overlapping the carousel */
+    .floating-search {
+      position: relative;
+      z-index: 20;
+      margin: -60px auto 0;
+      width: min(720px, calc(100% - 32px));
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 10px;
+      display: flex;
+      gap: 8px
+    }
+
+    .floating-search input {
+      border: 0;
+      outline: 0;
+      background: transparent;
+      flex: 1;
+      min-width: 0;
+      padding: 12px 14px;
+      font-size: 15px
+    }
+
+    .floating-search .btn {
+      flex: none
+    }
+
+    /* ---------- Quick actions ---------- */
+    .quick-actions {
+      padding: 0 0 8px
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+
+
+    }
+
+    .quick-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 18px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease
+    }
+
+    .quick-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 34px rgba(3, 17, 85, 0.12)
+    }
+
+    .quick-card .quick-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      flex: none;
+      background: #fff;
+      box-shadow: 0 6px 14px rgba(16, 36, 64, .08);
+      transition: transform .25s ease
+    }
+
+    .quick-card:hover .quick-icon {
+      transform: rotate(-6deg) scale(1.06)
+    }
+
+    .quick-card strong {
+      display: block;
+      font-size: 15.5px
+    }
+
+    .quick-card span {
+      font-size: 12.5px;
+      font-weight: 700
+    }
+
+    .quick-card.tone-blue {
+      background: #eaf3ff
+    }
+
+    .quick-card.tone-blue span {
+      color: var(--primary)
+    }
+
+    .quick-card.tone-teal {
+      background: #e9fbf3
+    }
+
+    .quick-card.tone-teal span {
+      color: var(--success)
+    }
+
+    .quick-card.tone-purple {
+      background: #f4edff
+    }
+
+    .quick-card.tone-purple span {
+      color: var(--purple)
+    }
+
+    .quick-card.tone-pink {
+      background: #ffedf6
+    }
+
+    .quick-card.tone-pink span {
+      color: #c0257a
+    }
+
+    /* ---------- Promo banners ---------- */
+    .promo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px
+    }
+
+
+    .promo-banner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+      padding: 34px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      min-height: 190px
+    }
+
+    .promo-banner .promo-copy {
+      flex: 1
+    }
+
+    .promo-banner .eyebrow {
+      opacity: .85
+    }
+
+    .promo-banner h3 {
+      font-size: 23px;
+      margin: 8px 0 8px;
+      letter-spacing: -.02em
+    }
+
+    .promo-banner p {
+      margin-bottom: 16px;
+      max-width: 340px
+    }
+
+    .promo-banner svg {
+      width: 120px;
+      height: 120px;
+      flex: none
+    }
+
+    .promo-a {
+      background: linear-gradient(135deg, #fff7ec, #ffe9d6);
+      border: 1px solid #ffe1bf
+    }
+
+    .promo-a .eyebrow {
+      color: #b5590c
+    }
+
+    .promo-a p {
+      color: #8a5a2a
+    }
+
+    .promo-b {
+      background: linear-gradient(135deg, #eafbf3, #dcf7ea);
+      border: 1px solid #c8f0da
+    }
+
+    .promo-b .eyebrow {
+      color: #0b6e52
+    }
+
+    .promo-b p {
+      color: #3c7364
+    }
+
+    .promo-banner:before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      right: -70px;
+      top: -70px;
+      background: rgba(255, 255, 255, .5)
+    }
+
+    /* ---------- Back to top ---------- */
+    .back-to-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: 0;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 14px 30px rgba(20, 100, 210, .35);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity .22s ease, transform .22s ease;
+      z-index: 80
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none
+    }
+
+    .back-to-top:hover {
+      background: var(--primary-dark)
+    }
+
+    /* ---------- Footer ---------- */
+    .site-footer {
+      background: #0d1b2e;
+      color: #c7d2e0;
+      padding: 56px 0 0;
+      margin-top: 70px
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 32px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08)
+    }
+
+    .footer-brand .logo {
+      color: #fff
+    }
+
+    .footer-brand p {
+      color: #93a2b8;
+      margin: 14px 0 18px;
+      max-width: 280px;
+      font-size: 14px
+    }
+
+    .social-row {
+      display: flex;
+      gap: 10px
+    }
+
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .08);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      transition: background .18s ease, transform .18s ease
+    }
+
+    .social-btn:hover {
+      background: var(--primary);
+      transform: translateY(-2px)
+    }
+
+    .footer-col h4 {
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 16px;
+      letter-spacing: .01em
+    }
+
+    .footer-col a {
+      display: block;
+      color: #93a2b8;
+      font-size: 14px;
+      padding: 6px 0;
+      transition: color .16s ease
+    }
+
+    .footer-col a:hover {
+      color: #fff
+    }
+
+    .footer-contact li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: #93a2b8;
+      font-size: 14px;
+      padding: 6px 0;
+      list-style: none
+    }
+
+    .footer-contact {
+      padding: 0;
+      margin: 0
+    }
+
+    .footer-contact svg {
+      flex: none;
+      margin-top: 2px;
+      color: #5b8def
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      min-width: 0;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      background: rgba(255, 255, 255, .06);
+      color: #fff;
+      padding: 11px 12px
+    }
+
+    .newsletter-form input::placeholder {
+      color: #7c8aa0
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 0;
+      color: #7c8aa0;
+      font-size: 13px;
+      flex-wrap: wrap
+    }
+
+    .footer-bottom .legal-links {
+      display: flex;
+      gap: 18px
+    }
+
+    .footer-bottom .legal-links a {
+      color: #93a2b8
+    }
+
+    .footer-bottom .legal-links a:hover {
+      color: #fff
+    }
+
+    .specialty {
+      background: linear-gradient(135deg, #E8F1FF, #DDF8F3);
+    }
+
+    .specialty:hover {
+      background: linear-gradient(135deg, #2563EB, #14B8A6);
+    }
+
+
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:991px) {
+      .nav-links {
+        display: none
+      }
+
+
+      .hamburger {
+        display: flex
+      }
+
+      .quick-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .carousel-slide {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 40px 30px
+      }
+
+      .carousel-slide p {
+        margin-left: auto;
+        margin-right: auto
+      }
+
+      .carousel-art {
+        order: -1
+      }
+
+      .carousel-art svg {
+        max-width: 190px
+      }
+    }
+
+    @media (max-width:767px) {
+      .promo-grid {
+        grid-template-columns: 1fr
+      }
+
+      .floating-search {
+        flex-wrap: wrap;
+        margin-top: -40px
+      }
+
+      .floating-search .btn {
+        flex: 1 1 100%
+      }
+    }
+
+    @media (max-width:575px) {
+      .quick-grid {
+        grid-template-columns: 1fr
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 26px
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .carousel-slide {
+        padding: 34px 20px;
+        min-height: auto
+      }
+
+      .promo-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 28px
+      }
+
+      .promo-banner p {
+        margin-left: auto;
+        margin-right: auto
+      }
+
+      .back-to-top {
+        right: 14px;
+        bottom: 14px;
+        width: 44px;
+        height: 44px
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .newsletter-form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+
+      .newsletter-form input {
+        width: 100%;
+      }
+
+      .newsletter-form button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .section-head {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .section-head h2 {
+        font-size: 28px;
+        white-space: nowrap;
+      }
+
+      .section-head .muted {
+        font-size: 16px;
+      }
+
+      .section-head .btn {
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="logo" href="index.html"><span class="logo-mark">M+</span>MedGrid</a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <div class="nav-item" data-nav-item>
+          <button class="nav-dropdown-toggle" data-nav-toggle aria-expanded="false" aria-haspopup="true">
+            Find Doctors
+            <svg class="chev" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="nav-dropdown-panel" role="menu" aria-label="Browse by specialty">
+            <a href="doctors.html?q=Cardiology" role="menuitem">❤️ Cardiology</a>
+            <a href="doctors.html?q=Dermatology" role="menuitem">🧴 Dermatology</a>
+            <a href="doctors.html?q=Pediatrics" role="menuitem">🧒 Pediatrics</a>
+            <a href="doctors.html?q=Orthopedics" role="menuitem">🦴 Orthopedics</a>
+            <a href="doctors.html?q=Gynecology" role="menuitem">👩‍⚕️ Gynecology</a>
+            <a href="doctors.html?q=General+Medicine" role="menuitem">🩺 General Medicine</a>
+            <a href="doctors.html" role="menuitem" style="color:var(--primary)">View all doctors</a>
+          </div>
+        </div>
+        <a href="appointments.html">Appointments</a>
+        <a href="medical-records.html">Health Records</a>
+        <a href="messages.html">Messages</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline desktop-only" href="login.html">Sign in</a>
+        <a class="btn btn-primary" href="register.html">Get started</a>
+        <button class="hamburger" data-drawer-toggle aria-label="Open menu" aria-expanded="false"
+          aria-controls="mobileDrawer">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer-overlay" data-drawer-overlay></div>
+  <aside class="mobile-drawer" id="mobileDrawer" data-mobile-drawer aria-hidden="true">
+    <div class="mobile-drawer-inner">
+      <div class="mobile-drawer-head">
+        <a class="logo" href="index.html"><span class="logo-mark">M+</span>MedGrid</a>
+        <button class="icon-btn" data-drawer-close aria-label="Close menu">✕</button>
+      </div>
+      <nav class="mobile-nav" aria-label="Mobile primary">
+        <button class="mobile-dropdown-toggle" data-mobile-dropdown-toggle aria-expanded="false"
+          aria-controls="mobileDoctorsPanel">
+          Find Doctors
+          <svg class="chev" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="mobile-dropdown" id="mobileDoctorsPanel">
+          <a href="doctors.html?q=Cardiology">❤️ Cardiology</a>
+          <a href="doctors.html?q=Dermatology">🧴 Dermatology</a>
+          <a href="doctors.html?q=Pediatrics">🧒 Pediatrics</a>
+          <a href="doctors.html?q=Orthopedics">🦴 Orthopedics</a>
+          <a href="doctors.html">View all doctors</a>
+        </div>
+        <a href="appointments.html">Appointments</a>
+        <a href="medical-records.html">Health Records</a>
+        <a href="prescriptions.html">Prescriptions</a>
+        <a href="messages.html">Messages</a>
+      </nav>
+      <div class="mobile-drawer-actions">
+        <a class="btn btn-outline" href="login.html">Sign in</a>
+        <a class="btn btn-primary" href="register.html">Get started</a>
+      </div>
+    </div>
+  </aside>
+
+  <main id="main">
+
+    <section class="hero-carousel">
+      <div class="container">
+        <div data-carousel>
+          <div class="carousel-viewport">
+            <div class="carousel-track" data-carousel-track>
+
+              <div class="carousel-slide slide-1" aria-hidden="false">
+                <div>
+                  <div class="eyebrow">Talk to a doctor today</div>
+                  <h2>Consult top doctors from home, anytime</h2>
+                  <p>Video or in-clinic visits with verified specialists across 10+ specialties, most available within
+                    the hour.</p>
+                  <a class="btn btn-primary" href="doctors.html">Find a doctor</a>
+                </div>
+                <div class="carousel-art">
+                  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img"
+                    aria-label="Stethoscope icon">
+                    <circle cx="110" cy="110" r="100" fill="rgba(255,255,255,.14)" />
+                    <circle cx="110" cy="110" r="74" fill="#fff" />
+                    <g transform="translate(72,60)" fill="none" stroke="#0e4da8" stroke-width="7" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M8 0 V26 a19 19 0 0 0 38 0 V0" />
+                      <path d="M46 26 V48 a29 29 0 0 1 -58 0 V38" />
+                      <circle cx="8" cy="0" r="6" fill="#0e4da8" stroke="none" />
+                      <circle cx="46" cy="0" r="6" fill="#0e4da8" stroke="none" />
+                      <circle cx="76" cy="70" r="15" fill="#0e4da8" stroke="none" />
+                      <circle cx="76" cy="70" r="6" fill="#fff" stroke="none" />
+                      <path d="M46 48 Q76 48 76 55" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="carousel-slide slide-2" aria-hidden="true">
+                <div>
+                  <div class="eyebrow">Book in under two minutes</div>
+                  <h2>Appointments that fit your schedule</h2>
+                  <p>Pick a specialist, choose a time that works, and get an instant confirmation — no phone calls
+                    required.</p>
+                  <a class="btn btn-primary" href="appointment.html">Book an appointment</a>
+                </div>
+                <div class="carousel-art">
+                  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img"
+                    aria-label="Calendar with checkmark icon">
+                    <circle cx="110" cy="110" r="100" fill="rgba(255,255,255,.14)" />
+                    <circle cx="110" cy="110" r="74" fill="#fff" />
+                    <g transform="translate(58,58)" fill="none" stroke="#5b21b6" stroke-width="7" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <rect x="0" y="14" width="104" height="90" rx="13" />
+                      <path d="M0 42 H104" />
+                      <path d="M27 0 V22M77 0 V22" />
+                      <path d="M27 66 L46 85 L80 50" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="carousel-slide slide-3" aria-hidden="true">
+                <div>
+                  <div class="eyebrow">One place for everything</div>
+                  <h2>Your health records, always within reach</h2>
+                  <p>Prescriptions, lab reports and consultation notes stay organized and ready whenever you need them.
+                  </p>
+                  <a class="btn btn-primary" href="medical-records.html">View health records</a>
+                </div>
+                <div class="carousel-art">
+                  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img"
+                    aria-label="Medical folder icon">
+                    <circle cx="110" cy="110" r="100" fill="rgba(255,255,255,.14)" />
+                    <circle cx="110" cy="110" r="74" fill="#fff" />
+                    <g transform="translate(56,68)" fill="none" stroke="#0b6e52" stroke-width="7" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M0 12 h34 l11 13 h63 v58 a9 9 0 0 1 -9 9 h-90 a9 9 0 0 1 -9 -9 z" />
+                      <path d="M13 54 h18 l9 -17 l12 30 l9 -13 h32" stroke-width="6" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="carousel-slide slide-4" aria-hidden="true">
+                <div>
+                  <div class="eyebrow">Stay connected</div>
+                  <h2>Message your care team securely</h2>
+                  <p>Ask a quick question or follow up after a visit — your doctor is a message away.</p>
+                  <a class="btn btn-primary" href="messages.html">Open messages</a>
+                </div>
+                <div class="carousel-art">
+                  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img"
+                    aria-label="Chat bubble with heart icon">
+                    <circle cx="110" cy="110" r="100" fill="rgba(255,255,255,.14)" />
+                    <circle cx="110" cy="110" r="74" fill="#fff" />
+                    <g transform="translate(56,58)">
+                      <path
+                        d="M0 22 a22 22 0 0 1 22 -22 h64 a22 22 0 0 1 22 22 v40 a22 22 0 0 1 -22 22 h-46 l-22 18 v-18 h-4 a22 22 0 0 1 -22 -22 z"
+                        fill="none" stroke="#9d174d" stroke-width="7" stroke-linejoin="round" />
+                      <path d="M54 44 c-7 -11 -25 -4 -18 11 c4 9 18 16 18 16 s14 -7 18 -16 c7 -15 -11 -22 -18 -11z"
+                        fill="#9d174d" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- arrow move  -->
+            <button class="carousel-arrow prev" data-carousel-prev aria-label="Previous slide">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <button class="carousel-arrow next" data-carousel-next aria-label="Next slide">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="carousel-dots" data-carousel-dots role="tablist" aria-label="Choose a slide"></div>
+        </div>
+
+        <form class="floating-search" data-search-link>
+          <input aria-label="Search doctors" placeholder="Search doctor, specialty or symptom">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="container quick-actions">
+      <div class="quick-grid">
+        <a class="quick-card tone-blue" href="doctors.html">
+          <span class="quick-icon">
+            <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(6,4)" stroke="#1464d2" stroke-width="2.6" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M4 0 v10 a7 7 0 0 0 14 0 V0" />
+                <path d="M18 10 v6 a11 11 0 0 1 -22 0 v-4" />
+                <circle cx="24" cy="24" r="5" fill="#1464d2" stroke="none" />
+                <circle cx="24" cy="24" r="2" fill="#fff" stroke="none" />
+              </g>
+            </svg>
+          </span>
+          <span>
+            <strong>Find a Doctor</strong>
+            <span>10+ specialties</span>
+          </span>
+        </a>
+
+        <a class="quick-card tone-teal" href="appointment.html">
+          <span class="quick-icon">
+            <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(5,6)" stroke="#0b6e52" stroke-width="2.6" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="0" y="5" width="30" height="24" rx="4" />
+                <path d="M0 12.5 H30" />
+                <path d="M8 0 V7M22 0 V7" />
+                <path d="M8 19 L13 24 L23 14" />
+              </g>
+            </svg>
+          </span>
+          <span>
+            <strong>Book Appointment</strong>
+            <span>Instant confirmation</span>
+          </span>
+        </a>
+
+        <a class="quick-card tone-purple" href="medical-records.html">
+          <span class="quick-icon">
+            <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(4,8)" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M0 3 h10 l3 4 h19 v17 a3 3 0 0 1 -3 3 h-26 a3 3 0 0 1 -3 -3 z" />
+                <path d="M4 15 h5 l3 -5 l4 9 l3 -4 h10" stroke-width="2.2" />
+              </g>
+            </svg>
+          </span>
+          <span>
+            <strong>Health Records</strong>
+            <span>Always up to date</span>
+          </span>
+        </a>
+
+        <a class="quick-card tone-pink" href="messages.html">
+          <span class="quick-icon">
+            <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 12 a8 8 0 0 1 8 -8 h16 a8 8 0 0 1 8 8 v9 a8 8 0 0 1 -8 8 h-13 l-8 6 v-6 a8 8 0 0 1 -8 -8 z"
+                stroke="#c0257a" stroke-width="2.6" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>
+            <strong>Message Care Team</strong>
+            <span>Usually replies fast</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container promo-grid">
+        <div class="promo-banner promo-a">
+          <div class="promo-copy">
+            <div class="eyebrow">New patients</div>
+            <h3>Your first consultation is on us</h3>
+            <p>Book a video visit with any general physician and pay nothing for the consultation fee.</p>
+            <a class="btn btn-primary" href="appointment.html">Book free visit</a>
+          </div>
+          <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="70" cy="70" r="62" fill="#ffe1bf" />
+            <g transform="translate(32,30)" fill="none" stroke="#b5590c" stroke-width="6" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="38" cy="20" r="16" />
+              <path d="M6 78 a32 32 0 0 1 64 0" />
+            </g>
+          </svg>
+        </div>
+
+        <div class="promo-banner promo-b">
+          <div class="promo-copy">
+            <div class="eyebrow">Refer a friend</div>
+            <h3>Give ₹200, get ₹200</h3>
+            <p>Share MedGrid with a friend. When they complete their first appointment, you both get credit.</p>
+            <a class="btn btn-secondary" href="#" data-toast="Referral link copied! Share it with a friend.">Invite
+              now</a>
+          </div>
+          <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="70" cy="70" r="62" fill="#c8f0da" />
+            <g transform="translate(28,42)" fill="none" stroke="#0b6e52" stroke-width="6" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="18" cy="10" r="10" />
+              <path d="M0 50 a18 18 0 0 1 36 0" />
+              <circle cx="66" cy="10" r="10" />
+              <path d="M48 50 a18 18 0 0 1 36 0" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Explore care</div>
+            <h2>Popular specialties</h2>
+            <p class="muted">Start with a specialty or browse all doctors.</p>
+          </div>
+          <a class="btn btn-outline" href="doctors.html">View all doctors</a>
+        </div>
+        <div class="grid grid-4" id="specialtiesGrid">
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Why MedGrid</div>
+            <h2>Everything in one place</h2>
+          </div>
+        </div>
+        <div class="grid grid-3">
+          <article class="card widget">
+            <h2>Easy appointments</h2>
+            <p class="muted">Compare doctors, choose a time and receive an instant confirmation.</p>
+          </article>
+          <article class="card widget">
+            <h2>Digital records</h2>
+            <p class="muted">Keep prescriptions, reports and consultation notes organized.</p>
+          </article>
+          <article class="card widget">
+            <h2>Secure messaging</h2>
+            <p class="muted">Stay connected with your care team through a simple chat experience.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <section class="section">
+      <div class="container card widget" style="background:var(--accent);text-align:center">
+        <h2>Take control of your healthcare</h2>
+        <p class="muted">Create your MedGrid account and start managing your care today.</p>
+        <a class="btn btn-primary" href="register.html">Get started</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="logo" href="index.html"><span class="logo-mark">M+</span>MedGrid</a>
+          <p>Find trusted doctors, manage appointments, prescriptions and health records — all in one secure, friendly
+            place.</p>
+          <div class="social-row">
+            <a class="social-btn" href="#" aria-label="MedGrid on X"><svg width="16" height="16" viewBox="0 0 24 24"
+                fill="currentColor">
+                <path
+                  d="M18.9 2H22l-7.5 8.6L23.3 22H16.8l-5-6.6-5.8 6.6H2.9l8-9.1L2 2h6.6l4.6 6.1L18.9 2Zm-1.1 18h1.7L7.3 3.9H5.5L17.8 20Z" />
+              </svg></a>
+            <a class="social-btn" href="https://www.instagram.com/aniruddha_kanade_07/"
+              aria-label="MedGrid on Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4.2" />
+                <circle cx="17.3" cy="6.7" r="1" />
+              </svg></a>
+            <a class="social-btn" href="#" aria-label="MedGrid on LinkedIn"><svg width="16" height="16"
+                viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.5c0-1.3-.02-3-1.83-3-1.84 0-2.12 1.43-2.12 2.9V21h-4V9Z" />
+              </svg></a>
+            <a class="social-btn" href="#" aria-label="MedGrid on Facebook"><svg width="16" height="16"
+                viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M13.5 21v-7.5H16l.4-3H13.5V8.4c0-.87.24-1.46 1.5-1.46H16.5V4.35C16.24 4.32 15.36 4.25 14.34 4.25c-2.14 0-3.6 1.3-3.6 3.7V10.5H8.25v3H10.74V21h2.76Z" />
+              </svg></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>For patients</h4>
+          <a href="doctors.html">Find a doctor</a>
+          <a href="appointment.html">Book appointment</a>
+          <a href="medical-records.html">Health records</a>
+          <a href="prescriptions.html">Prescriptions</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="login.html">Sign in</a>
+          <a href="register.html">Create account</a>
+          <a href="messages.html">Messages</a>
+          <a href="settings.html">Settings</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Get in touch</h4>
+          <ul class="footer-contact">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.99.36 1.96.7 2.9a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.11-.45c.94.34 1.91.57 2.9.7A2 2 0 0 1 22 16.9Z" />
+              </svg><span>1800-200-6470</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16v16H4z" opacity="0" />
+                <path d="M22 6 12 13 2 6" />
+                <path d="M2 6h20v12H2z" />
+              </svg><span>care@medgrid.example</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg><span>Pune, Maharashtra, India</span></li>
+          </ul>
+          <form class="newsletter-form" data-newsletter>
+
+            <input type="email" required placeholder="Your email" aria-label="Email for health tips "
+              style="color: wheat;"><br>
+            <button class="btn btn-primary" type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> All Rights Reserved </span>
+        <div class="legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" data-back-to-top aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <div class="toast-region" aria-live="polite"></div>
+  <div class="notification-panel hidden" data-notification-panel></div>
+
+  <script>
+    /* Central mock data. No network/API calls are required. */
+
+    const doctors = [
+      {id: 1, name: "Dr. Ananya Mehta", specialty: "Cardiologist", experience: 12, rating: 4.9, fee: 900, location: "Pune", hospital: "MedGrid Heart Centre", available: ["09:30", "11:00", "15:30"], bio: "Specialist in preventive cardiology, hypertension and heart-health planning.", image: "assets/images/doctor-1.svg"},
+      {id: 2, name: "Dr. Rohan Kulkarni", specialty: "Dermatologist", experience: 9, rating: 4.8, fee: 700, location: "Pune", hospital: "SkinWell Clinic", available: ["10:00", "13:30", "17:00"], bio: "Treats acne, eczema, pigmentation and evidence-based cosmetic concerns.", image: "assets/images/doctor-2.svg"},
+      {id: 3, name: "Dr. Priya Shah", specialty: "Pediatrician", experience: 14, rating: 4.9, fee: 650, location: "Mumbai", hospital: "LittleCare Hospital", available: ["09:00", "12:00", "16:00"], bio: "Child health, vaccinations, nutrition and developmental care.", image: "assets/images/doctor-3.svg"},
+      {id: 4, name: "Dr. Arjun Deshpande", specialty: "Orthopedic Surgeon", experience: 16, rating: 4.7, fee: 1000, location: "Pune", hospital: "OrthoPlus", available: ["10:30", "14:00", "18:00"], bio: "Sports injuries, joint pain, rehabilitation and minimally invasive procedures.", image: "assets/images/doctor-4.svg"},
+      {id: 5, name: "Dr. Neha Iyer", specialty: "Gynecologist", experience: 11, rating: 4.8, fee: 850, location: "Bengaluru", hospital: "HerCare", available: ["09:30", "12:30", "16:30"], bio: "Comprehensive women's health, prenatal care and preventive screening.", image: "assets/images/doctor-5.svg"},
+      {id: 6, name: "Dr. Vikram Rao", specialty: "Neurologist", experience: 18, rating: 4.9, fee: 1200, location: "Mumbai", hospital: "NeuroLife Institute", available: ["11:00", "14:30", "17:30"], bio: "Neurology consultation for migraine, epilepsy and movement disorders.", image: "assets/images/doctor-6.svg"},
+      {id: 7, name: "Dr. Sameer Joshi", specialty: "General Physician", experience: 10, rating: 4.6, fee: 500, location: "Pune", hospital: "MedGrid Family Clinic", available: ["08:30", "10:30", "15:00", "19:00"], bio: "Primary care, routine illness management and preventive health checks.", image: "assets/images/doctor-7.svg"},
+      {id: 8, name: "Dr. Kavita Nair", specialty: "Ophthalmologist", experience: 13, rating: 4.8, fee: 800, location: "Nashik", hospital: "VisionCare", available: ["09:00", "13:00", "16:00"], bio: "Comprehensive eye examinations, cataract care and diabetic eye screening.", image: "assets/images/doctor-8.svg"},
+      {id: 9, name: "Dr. Aditya Verma", specialty: "ENT Specialist", experience: 8, rating: 4.7, fee: 600, location: "Pune", hospital: "ClearVoice ENT", available: ["10:00", "12:00", "17:00"], bio: "ENT care for sinusitis, allergies, hearing concerns and throat disorders.", image: "assets/images/doctor-9.svg"},
+      {id: 10, name: "Dr. Meera Patil", specialty: "Endocrinologist", experience: 15, rating: 4.9, fee: 950, location: "Pune", hospital: "Metabolic Health Centre", available: ["09:30", "13:30", "16:30"], bio: "Diabetes, thyroid disorders, metabolic health and long-term lifestyle care.", image: "assets/images/doctor-10.svg"}
+    ];
+
+    const appointments = [
+      {id: "MG-260901", doctorId: 1, date: "2026-09-12", time: "09:30", type: "Video consultation", status: "Confirmed", reason: "Heart-health follow-up"},
+      {id: "MG-260904", doctorId: 2, date: "2026-09-18", time: "13:30", type: "In-clinic", status: "Confirmed", reason: "Skin review"},
+      {id: "MG-260825", doctorId: 7, date: "2026-08-25", time: "10:30", type: "In-clinic", status: "Completed", reason: "Annual check-up"},
+      {id: "MG-260810", doctorId: 4, date: "2026-08-10", time: "14:00", type: "In-clinic", status: "Completed", reason: "Knee pain"}
+    ];
+
+    const medicalRecords = [
+      {id: "REC-1001", date: "2026-09-01", doctorId: 1, type: "Consultation", title: "Cardiology follow-up", summary: "Blood pressure stable; continue lifestyle plan and medication.", diagnosis: "Essential hypertension, controlled", attachments: ["ECG report.pdf"]},
+      {id: "REC-1002", date: "2026-08-25", doctorId: 7, type: "Lab", title: "Annual health panel", summary: "CBC and metabolic panel reviewed; values within expected range.", diagnosis: "Routine screening", attachments: ["Blood panel.pdf"]},
+      {id: "REC-1003", date: "2026-08-10", doctorId: 4, type: "Consultation", title: "Knee assessment", summary: "Mild patellofemoral pain; physiotherapy recommended.", diagnosis: "Anterior knee pain", attachments: ["X-ray summary.pdf"]},
+      {id: "REC-1004", date: "2026-07-21", doctorId: 2, type: "Prescription", title: "Dermatology review", summary: "Topical treatment prescribed for acne flare.", diagnosis: "Acne vulgaris", attachments: ["Prescription.pdf"]}
+    ];
+
+    const prescriptions = [
+      {id: "RX-5001", date: "2026-09-01", doctorId: 1, medicine: "Amlodipine 5 mg", dose: "1 tablet", frequency: "Once daily", duration: "30 days", status: "Active"},
+      {id: "RX-5002", date: "2026-08-10", doctorId: 4, medicine: "Paracetamol 500 mg", dose: "1 tablet", frequency: "As needed", duration: "5 days", status: "Completed"},
+      {id: "RX-5003", date: "2026-07-21", doctorId: 2, medicine: "Adapalene 0.1% gel", dose: "Thin layer", frequency: "Nightly", duration: "8 weeks", status: "Active"}
+    ];
+
+    const messages = {
+      1: [{from: "doctor", text: "Hello! Your latest blood pressure reading looks encouraging.", time: "09:10"}, {from: "me", text: "Thank you, doctor. Should I continue the same routine?", time: "09:13"}, {from: "doctor", text: "Yes. Keep the current plan and we will review it at your appointment.", time: "09:15"}],
+      2: [{from: "doctor", text: "Hi! How is your skin responding to the treatment?", time: "Yesterday"}],
+      7: [{from: "doctor", text: "Your annual screening results are available.", time: "Aug 25"}, {from: "me", text: "Great, thank you.", time: "Aug 25"}]
+    };
+
+    const notifications = [
+      {id: 1, title: "Appointment confirmed", text: "Your appointment with Dr. Ananya Mehta is confirmed for Sep 12.", type: "appointment", time: "Today"},
+      {id: 2, title: "Prescription updated", text: "A new prescription is available in your records.", type: "prescription", time: "Yesterday"},
+      {id: 3, title: "Doctor message", text: "Dr. Rohan Kulkarni sent you a message.", type: "message", time: "2 days ago"}
+    ];
+
+    const specialties = [
+      ["❤️", "Cardiology"], ["🧴", "Dermatology"], ["🧒", "Pediatrics"], ["🦴", "Orthopedics"], ["👩‍⚕️", "Gynecology"], ["🧠", "Neurology"], ["🩺", "General Medicine"], ["👁️", "Ophthalmology"]
+    ];
+
+    function doctorById(id) {return doctors.find(d => d.id === Number(id));}
+    function getStoredAppointments() {return JSON.parse(localStorage.getItem("medgridAppointments") || "null") || [...appointments];}
+    function saveAppointments(items) {localStorage.setItem("medgridAppointments", JSON.stringify(items));}
+
+  </script>
+  <script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      applyTheme();
+      setupNavigation();
+      setupToasts();
+      setupModals();
+      setupNotifications();
+      setupGlobalSearch();
+      document.querySelectorAll("[data-year]").forEach(el => el.textContent = new Date().getFullYear());
+    });
+    function applyTheme() {const theme = localStorage.getItem("medgridTheme") || "light"; document.documentElement.dataset.theme = theme; document.querySelectorAll("[data-theme-toggle]").forEach(x => x.checked = theme === "dark");}
+    function toggleTheme() {const next = (document.documentElement.dataset.theme === "dark" ? "light" : "dark"); localStorage.setItem("medgridTheme", next); applyTheme(); toast(`${next === "dark" ? "Dark" : "Light"} mode enabled`, "success");}
+    function setupNavigation() {
+      document.querySelectorAll("[data-sidebar-toggle]").forEach(b => b.addEventListener("click", () => {document.querySelector(".app-sidebar")?.classList.toggle("open"); document.querySelector(".sidebar-overlay")?.classList.toggle("open");}));
+      document.querySelector(".sidebar-overlay")?.addEventListener("click", () => {document.querySelector(".app-sidebar")?.classList.remove("open"); document.querySelector(".sidebar-overlay")?.classList.remove("open")});
+      document.querySelector("[data-mobile-menu]")?.addEventListener("click", () => document.querySelector(".nav-links")?.classList.toggle("mobile-open"));
+      document.querySelectorAll("[data-theme-toggle]").forEach(x => x.addEventListener("change", toggleTheme));
+    }
+    function toast(message, type = "info") {
+      let region = document.querySelector(".toast-region"); if (!region) {region = document.createElement("div"); region.className = "toast-region"; region.setAttribute("aria-live", "polite"); document.body.appendChild(region);}
+      const el = document.createElement("div"); el.className = `toast ${type}`; el.textContent = message; region.appendChild(el); setTimeout(() => el.remove(), 3200);
+    }
+    function setupToasts() {document.querySelectorAll("[data-toast]").forEach(b => b.addEventListener("click", () => toast(b.dataset.toast, "success")));}
+    function openModal(id) {const m = document.getElementById(id); if (m) {m.classList.add("open"); m.setAttribute("aria-hidden", "false"); m.querySelector("button, input, select")?.focus();} }
+    function closeModal(id) {const m = document.getElementById(id); if (m) {m.classList.remove("open"); m.setAttribute("aria-hidden", "true");} }
+    function setupModals() {
+      document.querySelectorAll("[data-modal-open]").forEach(b => b.addEventListener("click", () => openModal(b.dataset.modalOpen)));
+      document.querySelectorAll("[data-modal-close]").forEach(b => b.addEventListener("click", () => closeModal(b.closest(".modal-backdrop").id)));
+      document.querySelectorAll(".modal-backdrop").forEach(m => m.addEventListener("click", e => {if (e.target === m) closeModal(m.id)}));
+      document.addEventListener("keydown", e => {if (e.key === "Escape") document.querySelectorAll(".modal-backdrop.open").forEach(m => closeModal(m.id));});
+    }
+    function setupNotifications() {
+      const btn = document.querySelector("[data-notifications]"), panel = document.querySelector("[data-notification-panel]");
+      if (!btn || !panel) return; btn.addEventListener("click", () => panel.classList.toggle("hidden"));
+      panel.innerHTML = notifications.map(n => `<div class="notification-row"><strong>${n.title}</strong><p class="muted">${n.text}</p><small>${n.time}</small></div>`).join("");
+    }
+    function setupGlobalSearch() {document.querySelectorAll("[data-search-link]").forEach(f => f.addEventListener("submit", e => {e.preventDefault(); location.href = `doctors.html?q=${encodeURIComponent(f.querySelector("input").value)}`}));}
+    function escapeHtml(s) {return String(s).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"}[c]));}
+    function doctorCard(d) {return `<article class="card doctor-card"><div class="doctor-top"><img class="avatar avatar-lg" src="${d.image}" alt="Portrait placeholder for ${escapeHtml(d.name)}"><div class="doctor-info"><h3>${escapeHtml(d.name)}</h3><div class="meta">${d.specialty} · ${d.experience} yrs</div><div class="meta">★ ${d.rating} · ₹${d.fee} · ${d.location}</div></div></div><p class="muted" style="margin-top:15px">${escapeHtml(d.bio)}</p><div class="doctor-actions"><a class="btn btn-outline" href="doctor-profile.html?id=${d.id}">View Profile</a><a class="btn btn-primary" href="appointment.html?doctor=${d.id}">Book</a></div></article>`;}
+    function doctorName(id) {return doctorById(id)?.name || "MedGrid Care Team";}
+
+  </script>
+  <script>
+    /* Homepage-only interactivity for MedGrid's index.html.
+       Depends on js/data.js (specialties) and js/main.js (toast) already
+       being loaded first, but degrades gracefully if they are not. */
+    document.addEventListener("DOMContentLoaded", () => {
+      renderSpecialties();
+      setupNavDropdown();
+      setupMobileDrawer();
+      setupCarousel();
+      setupBackToTop();
+      setupNewsletter();
+    });
+
+    /* ---------- Popular specialties (data-driven, was previously static) ---------- */
+    function renderSpecialties() {
+      const grid = document.getElementById("specialtiesGrid");
+      if (!grid || typeof specialties === "undefined") return;
+      grid.innerHTML = specialties
+        .map(
+          (s) =>
+            `<a class="card specialty" href="doctors.html?q=${encodeURIComponent(s[1])}"><div class="specialty-icon">${s[0]}</div><strong>${s[1]}</strong></a>`
+        )
+        .join("");
+    }
+
+
+    /* ---------- Desktop nav dropdown ---------- */
+    function setupNavDropdown() {
+      const items = document.querySelectorAll("[data-nav-item]");
+      items.forEach((item) => {
+        const toggle = item.querySelector("[data-nav-toggle]");
+        if (!toggle) return;
+        const close = () => {
+          item.classList.remove("open");
+          toggle.setAttribute("aria-expanded", "false");
+        };
+        const open = () => {
+          items.forEach((i) => i !== item && i.classList.remove("open"));
+          item.classList.add("open");
+          toggle.setAttribute("aria-expanded", "true");
+        };
+        toggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          item.classList.contains("open") ? close() : open();
+        });
+        item.addEventListener("mouseenter", open);
+        // item.addEventListener("mouseleave", close);
+      });
+      document.addEventListener("click", () => items.forEach((i) => i.classList.remove("open")));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") items.forEach((i) => i.classList.remove("open"));
+      });
+    }
+
+    /* ---------- Mobile hamburger drawer ---------- */
+    function setupMobileDrawer() {
+      const hamburger = document.querySelector("[data-drawer-toggle]");
+      const drawer = document.querySelector("[data-mobile-drawer]");
+      const overlay = document.querySelector("[data-drawer-overlay]");
+      const closeBtn = document.querySelector("[data-drawer-close]");
+      if (!hamburger || !drawer || !overlay) return;
+
+      const openDrawer = () => {
+        drawer.classList.add("open");
+        overlay.classList.add("open");
+        hamburger.setAttribute("aria-expanded", "true");
+        document.body.classList.add("drawer-open");
+      };
+      const closeDrawer = () => {
+        drawer.classList.remove("open");
+        overlay.classList.remove("open");
+        hamburger.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("drawer-open");
+      };
+
+      hamburger.addEventListener("click", () => {
+        drawer.classList.contains("open") ? closeDrawer() : openDrawer();
+      });
+      closeBtn?.addEventListener("click", closeDrawer);
+      overlay.addEventListener("click", closeDrawer);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeDrawer();
+      });
+
+      /* Accordion dropdown inside the drawer */
+      document.querySelectorAll("[data-mobile-dropdown-toggle]").forEach((btn) => {
+        const panelId = btn.getAttribute("aria-controls");
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        btn.addEventListener("click", () => {
+          const isOpen = panel.classList.toggle("open");
+          btn.setAttribute("aria-expanded", String(isOpen));
+        });
+      });
+    }
+
+    /* ---------- Hero carousel: autoplay, arrows, dots, swipe, keyboard ---------- */
+    function setupCarousel() {
+      const root = document.querySelector("[data-carousel]");
+      if (!root) return;
+      const track = root.querySelector("[data-carousel-track]");
+      const slides = Array.from(root.querySelectorAll(".carousel-slide"));
+      const dotsWrap = root.querySelector("[data-carousel-dots]");
+      const prevBtn = root.querySelector("[data-carousel-prev]");
+      const nextBtn = root.querySelector("[data-carousel-next]");
+      if (!track || slides.length === 0) return;
+
+      let index = 0;
+      let timer = null;
+      const AUTOPLAY_MS = 5500;
+
+      slides.forEach((_, i) => {
+        const dot = document.createElement("button");
+        dot.className = "carousel-dot" + (i === 0 ? " active" : "");
+        dot.setAttribute("role", "tab");
+        dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
+        dot.addEventListener("click", () => goTo(i));
+        dotsWrap.appendChild(dot);
+      });
+      const dots = Array.from(dotsWrap.children);
+
+      function render() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        slides.forEach((s, i) => s.setAttribute("aria-hidden", String(i !== index)));
+        dots.forEach((d, i) => d.classList.toggle("active", i === index));
+      }
+      function goTo(i) {
+        index = (i + slides.length) % slides.length;
+        render();
+        restart();
+      }
+      function next() {
+        goTo(index + 1);
+      }
+      function prev() {
+        goTo(index - 1);
+      }
+      function start() {
+        timer = setInterval(next, AUTOPLAY_MS);
+      }
+      function stop() {
+        clearInterval(timer);
+      }
+      function restart() {
+        stop();
+        start();
+      }
+
+      prevBtn?.addEventListener("click", prev);
+      nextBtn?.addEventListener("click", next);
+      root.addEventListener("mouseenter", stop);
+      root.addEventListener("mouseleave", start);
+      root.addEventListener("focusin", stop);
+      root.addEventListener("focusout", start);
+
+      root.setAttribute("tabindex", "0");
+      root.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") next();
+        if (e.key === "ArrowLeft") prev();
+      });
+
+      /* touch swipe */
+      let touchStartX = 0;
+      track.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.touches[0].clientX;
+          stop();
+        },
+        {passive: true}
+      );
+      track.addEventListener(
+        "touchend",
+        (e) => {
+          const delta = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(delta) > 40) delta < 0 ? next() : prev();
+          start();
+        },
+        {passive: true}
+      );
+
+      render();
+      start();
+    }
+
+    /* ---------- Back-to-top + sticky-shadow ---------- */
+    function setupBackToTop() {
+      const btn = document.querySelector("[data-back-to-top]");
+      if (!btn) return;
+      window.addEventListener(
+        "scroll",
+        () => {
+          btn.classList.toggle("visible", window.scrollY > 640);
+        },
+        {passive: true}
+      );
+      btn.addEventListener("click", () => window.scrollTo({top: 0, behavior: "smooth"}));
+    }
+
+    /* ---------- Footer newsletter (demo only, matches the prototype's toast pattern) ---------- */
+    function setupNewsletter() {
+      const form = document.querySelector("[data-newsletter]");
+      if (!form) return;
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = form.querySelector("input");
+        if (!input.value.trim()) return;
+        if (typeof toast === "function") toast("Subscribed! Watch your inbox for health tips.", "success");
+        input.value = "";
+      });
+    }
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1004 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View doctor details and book an appointment with MedGrid.">
+  <title>Doctor Profile | MedGrid</title>
+
+  <style>
+    :root {
+      --primary: #1464d2;
+      --primary-dark: #0e4da8;
+      --secondary: #13a67a;
+      --bg: #f5f8fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --border: #dfe6ef;
+      --accent: #e9f3ff;
+      --shadow: 0 10px 30px rgba(16, 36, 64, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .container {
+      width: min(1320px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 3px 12px rgba(16, 36, 64, 0.04);
+    }
+
+    .nav-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      color: var(--primary);
+      font-size: 25px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .logo-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 1.8vw, 25px);
+      margin-left: auto;
+    }
+
+    .nav-links > a {
+      padding: 10px 0;
+      color: #53627a;
+      font-size: 15px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links > a:hover,
+    .nav-links > a.active {
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 17px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), #5289ee);
+      box-shadow: 0 6px 16px rgba(20, 100, 210, 0.16);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-outline {
+      color: var(--text);
+      background: white;
+      border-color: var(--border);
+    }
+
+    .menu-toggle,
+    .mobile-actions {
+      display: none;
+    }
+
+    /* PAGE HEADING */
+
+    .page-heading {
+      padding: 25px 0 18px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .breadcrumb a {
+      color: var(--primary);
+    }
+
+    .page-heading h1 {
+      margin-bottom: 5px;
+      font-size: clamp(28px, 3.5vw, 38px);
+      line-height: 1.25;
+    }
+
+    .page-heading p {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* DOCTOR PROFILE */
+
+    .profile-section {
+      padding: 0 0 42px;
+    }
+
+    .profile-card {
+      width: 100%;
+      max-width: 1050px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 30px;
+      background:
+        radial-gradient(circle at 90% 10%, #d5f4eb, transparent 35%),
+        linear-gradient(120deg, #e9f3ff, #ffffff);
+    }
+
+    .doctor-image {
+      width: 140px;
+      height: 140px;
+      flex: 0 0 140px;
+      object-fit: cover;
+      border: 4px solid white;
+      border-radius: 20px;
+      background: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 30px;
+      background: #dcfae8;
+      color: #087443;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .profile-info h2 {
+      margin: 10px 0 4px;
+      font-size: clamp(24px, 3vw, 33px);
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .specialty {
+      color: var(--muted);
+    }
+
+    .rating {
+      margin-top: 8px;
+      color: #e99a00;
+      font-weight: 800;
+    }
+
+    .rating span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .profile-body {
+      padding: 28px 30px;
+    }
+
+    .section-block {
+      margin-bottom: 25px;
+    }
+
+    .section-block h3 {
+      margin-bottom: 11px;
+      font-size: 19px;
+    }
+
+    .section-block p {
+      color: var(--muted);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .detail-item {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fcfdff;
+    }
+
+    .detail-item .label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .detail-item strong {
+      overflow-wrap: anywhere;
+    }
+
+    .slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .slot {
+      padding: 8px 14px;
+      border-radius: 9px;
+      background: var(--accent);
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .profile-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .loading,
+    .error-card {
+      padding: 35px 20px;
+      text-align: center;
+    }
+
+    .error-card p {
+      margin: 10px 0 20px;
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+
+    .footer {
+      padding: 22px 0;
+      border-top: 1px solid var(--border);
+      background: white;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* TABLET */
+
+    @media (max-width: 1050px) {
+      .nav-inner {
+        gap: 16px;
+      }
+
+      .logo {
+        font-size: 22px;
+      }
+
+      .nav-links {
+        gap: 13px;
+      }
+
+      .nav-links > a {
+        font-size: 14px;
+      }
+
+      .nav-actions .btn {
+        padding: 10px 12px;
+      }
+    }
+
+    /* MOBILE NAVBAR */
+
+    @media (max-width: 850px) {
+      .nav-inner {
+        position: relative;
+        min-height: 68px;
+        gap: 12px;
+      }
+
+      .menu-toggle {
+        display: grid;
+        place-items: center;
+        width: 43px;
+        height: 43px;
+        margin-left: auto;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        background: white;
+        color: var(--text);
+        font-size: 23px;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: -10px;
+        right: -10px;
+        z-index: 1001;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        margin: 0;
+        padding: 12px 18px 18px;
+        background: white;
+        border: 1px solid var(--border);
+        border-top: none;
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 12px 25px rgba(16, 36, 64, 0.12);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links > a {
+        padding: 12px 9px;
+        border-bottom: 1px solid #eef2f7;
+        font-size: 15px;
+        white-space: normal;
+      }
+
+      .nav-links > a.active {
+        border-radius: 8px;
+        background: #f0f6ff;
+      }
+
+      .mobile-actions {
+        display: flex;
+        gap: 10px;
+        padding-top: 14px;
+      }
+
+      .mobile-actions .btn {
+        flex: 1;
+      }
+
+      .nav-actions {
+        display: none;
+      }
+
+      .profile-top {
+        padding: 25px;
+      }
+
+      .profile-body {
+        padding: 25px;
+      }
+    }
+
+    /* SMARTPHONES */
+
+    @media (max-width: 520px) {
+      .container {
+        width: calc(100% - 24px);
+      }
+
+      .nav-inner {
+        min-height: 64px;
+      }
+
+      .logo {
+        gap: 7px;
+        font-size: 21px;
+      }
+
+      .logo-mark {
+        width: 37px;
+        height: 37px;
+        border-radius: 10px;
+        font-size: 17px;
+      }
+
+      .menu-toggle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .mobile-actions {
+        flex-direction: column;
+      }
+
+      .mobile-actions .btn {
+        width: 100%;
+      }
+
+      .page-heading {
+        padding: 22px 0 16px;
+      }
+
+      .breadcrumb {
+        gap: 6px;
+        font-size: 12px;
+      }
+
+      .page-heading h1 {
+        font-size: 29px;
+      }
+
+      .page-heading p {
+        font-size: 14px;
+      }
+
+      .profile-section {
+        padding-bottom: 28px;
+      }
+
+      .profile-card {
+        border-radius: 15px;
+      }
+
+      .profile-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 20px;
+      }
+
+      .doctor-image {
+        width: 100px;
+        height: 100px;
+        flex-basis: 100px;
+        border-radius: 15px;
+      }
+
+      .profile-info h2 {
+        font-size: 25px;
+      }
+
+      .profile-body {
+        padding: 20px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .detail-item {
+        padding: 13px;
+      }
+
+      .section-block {
+        margin-bottom: 22px;
+      }
+
+      .profile-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+
+      .profile-actions .btn {
+        width: 100%;
+      }
+
+      .slots {
+        gap: 8px;
+      }
+
+      .slot {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-inner">
+
+      <a href="index.html" class="logo">
+        <span class="logo-mark">M+</span>
+        <span>MedGrid</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="doctors.html" class="active">Find Doctors</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="medical-records.html">Records</a>
+        <a href="messages.html">Messages</a>
+
+        <div class="mobile-actions">
+          <a href="login.html" class="btn btn-outline">Sign in</a>
+          <a href="register.html" class="btn btn-primary">Get started</a>
+        </div>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline">Sign in</a>
+        <a href="register.html" class="btn btn-primary">Get started</a>
+      </div>
+
+      <button
+        type="button"
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="navLinks"
+      >
+        <span id="menuIcon">&#9776;</span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <section class="container page-heading">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <a href="doctors.html">Find Doctors</a>
+        <span>/</span>
+        <span>Doctor Profile</span>
+      </div>
+
+      <h1>Doctor Profile</h1>
+      <p>Learn about your doctor and choose an appointment time.</p>
+    </section>
+
+    <section class="container profile-section">
+      <div id="doctorProfile" aria-live="polite">
+        <div class="profile-card loading">Loading doctor profile...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      &copy; <span id="year"></span> MedGrid. Healthcare made simpler.
+    </div>
+  </footer>
+
+  <script>
+    "use strict";
+
+    /* SAMPLE DOCTOR DATA */
+
+    const doctors = [
+      {
+        id: 1,
+        name: "Dr. Ananya Mehta",
+        specialty: "Cardiologist",
+        experience: 12,
+        rating: 4.9,
+        fee: 900,
+        location: "Pune",
+        hospital: "MedGrid Heart Centre",
+        available: ["09:30", "11:00", "15:30"],
+        bio: "Specialist in preventive cardiology, hypertension and heart-health planning.",
+        image: "assets/images/doctor-1.svg"
+      },
+      {
+        id: 2,
+        name: "Dr. Rohan Kulkarni",
+        specialty: "Dermatologist",
+        experience: 9,
+        rating: 4.8,
+        fee: 700,
+        location: "Pune",
+        hospital: "SkinWell Clinic",
+        available: ["10:00", "13:30", "17:00"],
+        bio: "Consultations for common skin concerns and preventive skin care.",
+        image: "assets/images/doctor-2.svg"
+      },
+      {
+        id: 3,
+        name: "Dr. Priya Shah",
+        specialty: "Pediatrician",
+        experience: 14,
+        rating: 4.9,
+        fee: 650,
+        location: "Mumbai",
+        hospital: "LittleCare Hospital",
+        available: ["09:00", "12:00", "16:00"],
+        bio: "Child health, vaccinations, nutrition and developmental care.",
+        image: "assets/images/doctor-3.svg"
+      },
+      {
+        id: 4,
+        name: "Dr. Arjun Deshpande",
+        specialty: "Orthopedic Surgeon",
+        experience: 16,
+        rating: 4.7,
+        fee: 1000,
+        location: "Pune",
+        hospital: "OrthoPlus",
+        available: ["10:30", "14:00", "18:00"],
+        bio: "Consultations for joint health, sports injuries and rehabilitation.",
+        image: "assets/images/doctor-4.svg"
+      },
+      {
+        id: 5,
+        name: "Dr. Neha Iyer",
+        specialty: "Gynecologist",
+        experience: 11,
+        rating: 4.8,
+        fee: 850,
+        location: "Bengaluru",
+        hospital: "HerCare",
+        available: ["09:30", "12:30", "16:30"],
+        bio: "Women's health, prenatal care and preventive screening.",
+        image: "assets/images/doctor-5.svg"
+      },
+      {
+        id: 6,
+        name: "Dr. Vikram Rao",
+        specialty: "Neurologist",
+        experience: 18,
+        rating: 4.9,
+        fee: 1200,
+        location: "Mumbai",
+        hospital: "NeuroLife Institute",
+        available: ["11:00", "14:30", "17:30"],
+        bio: "Neurology consultations and general neurological care.",
+        image: "assets/images/doctor-6.svg"
+      },
+      {
+        id: 7,
+        name: "Dr. Sameer Joshi",
+        specialty: "General Physician",
+        experience: 10,
+        rating: 4.6,
+        fee: 500,
+        location: "Pune",
+        hospital: "MedGrid Family Clinic",
+        available: ["08:30", "10:30", "15:00", "19:00"],
+        bio: "Primary care, routine illness management and preventive health checks.",
+        image: "assets/images/doctor-7.svg"
+      },
+      {
+        id: 8,
+        name: "Dr. Kavita Nair",
+        specialty: "Ophthalmologist",
+        experience: 13,
+        rating: 4.8,
+        fee: 800,
+        location: "Nashik",
+        hospital: "VisionCare",
+        available: ["09:00", "13:00", "16:00"],
+        bio: "Eye examinations and general ophthalmology consultations.",
+        image: "assets/images/doctor-8.svg"
+      },
+      {
+        id: 9,
+        name: "Dr. Aditya Verma",
+        specialty: "ENT Specialist",
+        experience: 8,
+        rating: 4.7,
+        fee: 600,
+        location: "Pune",
+        hospital: "ClearVoice ENT",
+        available: ["10:00", "12:00", "17:00"],
+        bio: "Consultations for common ear, nose and throat concerns.",
+        image: "assets/images/doctor-9.svg"
+      },
+      {
+        id: 10,
+        name: "Dr. Meera Patil",
+        specialty: "Endocrinologist",
+        experience: 15,
+        rating: 4.9,
+        fee: 950,
+        location: "Pune",
+        hospital: "Metabolic Health Centre",
+        available: ["09:30", "13:30", "16:30"],
+        bio: "Consultations for diabetes, thyroid and metabolic health.",
+        image: "assets/images/doctor-10.svg"
+      }
+    ];
+
+    /* SAFE TEXT */
+
+    function escapeHTML(value) {
+      const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      };
+
+      return String(value).replace(/[&<>"']/g, character => {
+        return entities[character];
+      });
+    }
+
+    /* SELECT DOCTOR FROM URL */
+
+    function getDoctorFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const rawId = params.get("id") || params.get("doctor");
+
+      if (rawId === null) {
+        return doctors[0];
+      }
+
+      if (!/^\d+$/.test(rawId)) {
+        return null;
+      }
+
+      return doctors.find(doctor => doctor.id === Number(rawId)) || null;
+    }
+
+    /* RENDER PROFILE */
+
+    function renderDoctorProfile(doctor) {
+      const profile = document.getElementById("doctorProfile");
+
+      if (!doctor) {
+        profile.innerHTML = `
+          <article class="profile-card error-card">
+            <h2>Doctor not found</h2>
+            <p>Please return to the doctor directory and select a doctor.</p>
+            <a href="doctors.html" class="btn btn-primary">
+              Back to Doctors
+            </a>
+          </article>
+        `;
+        return;
+      }
+
+      const slotsHTML = doctor.available.map(time => `
+        <span class="slot">${escapeHTML(time)}</span>
+      `).join("");
+
+      profile.innerHTML = `
+        <article class="profile-card">
+
+          <div class="profile-top">
+            <img
+              class="doctor-image"
+              src="${escapeHTML(doctor.image)}"
+              alt="${escapeHTML(doctor.name)}"
+            >
+
+            <div class="profile-info">
+              <span class="verified-badge">
+                &#10003; Verified Doctor
+              </span>
+
+              <h2>${escapeHTML(doctor.name)}</h2>
+
+              <p class="specialty">
+                ${escapeHTML(doctor.specialty)}
+                &middot; ${doctor.experience} years experience
+              </p>
+
+              <p class="rating">
+                &#9733; ${doctor.rating}
+                <span>Patient rating</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="profile-body">
+
+            <section class="section-block">
+              <h3>About the Doctor</h3>
+              <p>${escapeHTML(doctor.bio)}</p>
+            </section>
+
+            <section class="section-block">
+              <h3>Professional Details</h3>
+
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <span class="label">Hospital / Clinic</span>
+                  <strong>${escapeHTML(doctor.hospital)}</strong>
+                </div>
+
+                <div class="detail-item">
+                  <span class="label">Location</span>
+                  <strong>${escapeHTML(doctor.location)}</strong>
+                </div>
+
+                <div class="detail-item">
+                  <span class="label">Experience</span>
+                  <strong>${doctor.experience} years</strong>
+                </div>
+
+                <div class="detail-item">
+                  <span class="label">Consultation Fee</span>
+                  <strong>₹${doctor.fee.toLocaleString("en-IN")}</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="section-block">
+              <h3>Available Time Slots</h3>
+              <div class="slots">${slotsHTML}</div>
+              <p style="margin-top:10px;font-size:13px">
+                Sample availability only. Confirm the actual date and time
+                on the booking page.
+              </p>
+            </section>
+
+            <div class="profile-actions">
+              <a href="doctors.html" class="btn btn-outline">
+                &#8592; Back to Doctors
+              </a>
+
+              <a
+                href="appointment.html?doctor=${doctor.id}"
+                class="btn btn-primary"
+              >
+                Book Appointment &#8594;
+              </a>
+            </div>
+
+          </div>
+        </article>
+      `;
+
+      const image = profile.querySelector(".doctor-image");
+
+      image.addEventListener("error", function () {
+        this.onerror = null;
+        this.src =
+          "https://placehold.co/160x160/e9f3ff/1464d2?text=Doctor";
+      });
+    }
+
+    /* MOBILE NAVBAR */
+
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+    const menuIcon = document.getElementById("menuIcon");
+
+    function closeMobileMenu() {
+      navLinks.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation");
+      menuIcon.textContent = "☰";
+    }
+
+    menuToggle.addEventListener("click", function () {
+      const isOpen = navLinks.classList.toggle("open");
+
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Close navigation" : "Open navigation"
+      );
+
+      menuIcon.textContent = isOpen ? "×" : "☰";
+    });
+
+    navLinks.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", closeMobileMenu);
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 850) {
+        closeMobileMenu();
+      }
+    });
+
+    /* INITIALIZE */
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    renderDoctorProfile(getDoctorFromURL());
+  </script>
+
+</body>
+</html>

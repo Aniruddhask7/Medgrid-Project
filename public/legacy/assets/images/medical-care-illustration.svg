@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520">
+<defs>
+ <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1464d2"/><stop offset="1" stop-color="#13a67a"/></linearGradient>
+ <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#e9f3ff"/><stop offset="1" stop-color="#e6fff6"/></linearGradient>
+ <filter id="s"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-opacity=".14"/></filter>
+</defs>
+<rect width="760" height="520" rx="44" fill="url(#g2)"/>
+<circle cx="610" cy="92" r="55" fill="#fff" opacity=".8"/><circle cx="105" cy="410" r="75" fill="#fff" opacity=".65"/>
+<g filter="url(#s)">
+ <rect x="210" y="70" width="340" height="390" rx="32" fill="#fff"/>
+ <rect x="245" y="110" width="270" height="64" rx="18" fill="url(#g)"/>
+ <text x="270" y="151" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#fff">MedGrid Care</text>
+ <circle cx="380" cy="292" r="86" fill="#eef7ff"/>
+ <path d="M350 205v174M293 292h174" stroke="#1464d2" stroke-width="25" stroke-linecap="round"/>
+ <circle cx="380" cy="292" r="103" fill="none" stroke="#13a67a" stroke-width="7" stroke-dasharray="8 16"/>
+ <rect x="265" y="407" width="230" height="13" rx="6" fill="#dfe6ef"/>
+ <rect x="265" y="407" width="165" height="13" rx="6" fill="#13a67a"/>
+</g>
+<g font-family="Arial,sans-serif">
+ <g filter="url(#s)"><rect x="45" y="70" width="150" height="92" rx="20" fill="#fff"/>
+ <text x="68" y="103" font-size="13" fill="#667085">Appointments</text><text x="68" y="138" font-size="26" font-weight="700" fill="#172033">24/7</text><circle cx="168" cy="96" r="9" fill="#13a67a"/></g>
+ <g filter="url(#s)"><rect x="565" y="350" width="150" height="92" rx="20" fill="#fff"/>
+ <text x="588" y="383" font-size="13" fill="#667085">Health records</text><text x="588" y="418" font-size="22" font-weight="700" fill="#172033">Secure</text><circle cx="688" cy="376" r="9" fill="#1464d2"/></g>
+</g>
+</svg>

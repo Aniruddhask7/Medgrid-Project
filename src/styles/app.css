@@ -1,0 +1,137 @@
+:root {
+    color-scheme: light;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    min-width: 320px;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    overflow: hidden;
+}
+
+.legacy-page {
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+}
+
+.legacy-frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+    border: 0;
+    background: #fff;
+}
+
+
+.register-container {
+    display: flex;
+    min-height: 100vh;
+    background: #f4f7fc;
+    font-family: Arial, sans-serif;
+}
+
+.register-left,
+.register-right {
+    width: 50%;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+.register-left {
+    background: linear-gradient(135deg, #1761c5, #078d91);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.register-right {
+    background: white;
+}
+
+.register-right form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 500px;
+}
+
+.register-right input:not([type="checkbox"]) {
+    padding: 15px;
+    border: 1px solid #d8e0ed;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+.password-field {
+    display: flex;
+    gap: 10px;
+}
+
+.password-field input {
+    flex: 1;
+    min-width: 0;
+}
+
+.password-meter {
+    height: 7px;
+    background: #dce4ee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.password-meter-fill {
+    height: 100%;
+    background: #10a77b;
+    transition: width 0.3s;
+}
+
+.register-right button {
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #2870dc;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.register-right button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.terms {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.register-message {
+    color: #1761c5;
+}
+
+@media (max-width: 768px) {
+    .register-container {
+        flex-direction: column;
+    }
+
+    .register-left,
+    .register-right {
+        width: 100%;
+        padding: 25px;
+    }
+}
