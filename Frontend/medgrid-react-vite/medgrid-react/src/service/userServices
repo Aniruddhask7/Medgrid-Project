@@ -1,0 +1,43 @@
+
+const API_URL = "http://localhost:8081/api/user";
+
+export async function registerUser(userData) {
+    try {
+        const response = await fetch(`${API_URL}/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const result = await response.text();
+
+        console.log("HTTP Status:", response.status);
+        console.log("Server Response:", result);
+
+        if (!response.ok) {
+            throw new Error(result || "Registration failed");
+        }
+
+        return result;
+
+    } catch (error) {
+        console.error("API Error:", error);
+        throw error;
+    }
+}
+
+
+
+// GET ALL USERS
+export async function getAllUsers() {
+
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+        throw new Error("Unable to fetch users");
+    }
+
+    return await response.json();
+}
